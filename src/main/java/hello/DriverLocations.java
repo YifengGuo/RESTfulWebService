@@ -66,6 +66,7 @@ public class DriverLocations {
             return false;
         }
         locations.remove(locationId);
+        --currentLocationId;
         return true;
     }
 

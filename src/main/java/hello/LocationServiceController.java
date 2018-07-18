@@ -12,7 +12,7 @@ import java.util.concurrent.atomic.AtomicLong;
  */
 @RestController
 public class LocationServiceController {
-    private AtomicLong counter = new AtomicLong();
+    private final AtomicLong counter = new AtomicLong();
     private Random random = new Random();
 
     // key: driverId
@@ -25,7 +25,7 @@ public class LocationServiceController {
      * @param inputLocation input location
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations", method = RequestMethod.POST)
+    @RequestMapping(value = "/drivers/{id}/locations", method = RequestMethod.POST)
     public ResponseEntity<Location> create(
             @PathVariable("id") String id,
             @RequestBody(required = false) Location inputLocation
@@ -49,7 +49,7 @@ public class LocationServiceController {
      * @param id Driver Id
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations", method = RequestMethod.GET)
+    @RequestMapping(value = "/drivers/{id}/locations", method = RequestMethod.GET)
     public ResponseEntity<List<Location>> getAll(@PathVariable("id") String id) {
         // sanity check
         if (!locationsMap.containsKey(id)) {
@@ -71,7 +71,7 @@ public class LocationServiceController {
      * @param locationId
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations/{locationId}", method = RequestMethod.GET)
+    @RequestMapping(value = "/drivers/{id}/locations/{locationId}", method = RequestMethod.GET)
     public ResponseEntity<Location> get(@PathVariable("id") String id,
                                         @PathVariable("locationId") String locationId) {
         Location location = null; // returned location
@@ -96,7 +96,7 @@ public class LocationServiceController {
      * @param id
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations/current", method = RequestMethod.GET)
+    @RequestMapping(value = "/drivers/{id}/locations/current", method = RequestMethod.GET)
     public ResponseEntity<Location> getCurrent(@PathVariable("id") String id) {
         Location location = null; // returned location
         // sanity check
@@ -119,7 +119,7 @@ public class LocationServiceController {
      * @param locationId
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations/{locationId}", method = RequestMethod.PUT)
+    @RequestMapping(value = "/drivers/{id}/locations/{locationId}", method = RequestMethod.PUT)
     public ResponseEntity<Location> update(@PathVariable("id") String id,
                                            @PathVariable("locationId") String locationId,
                                            @RequestBody(required = false) Location newLocation) {
@@ -145,14 +145,14 @@ public class LocationServiceController {
      * @param locationId
      * @return
      */
-    @RequestMapping(value = "drivers/{id}/locations/{locationId}", method = RequestMethod.DELETE)
+    @RequestMapping(value = "/drivers/{id}/locations/{locationId}", method = RequestMethod.DELETE)
     public ResponseEntity<Location> delete(@PathVariable("id") String id,
                                            @PathVariable("locationId") String locationId) {
         return this.deleteIml(id, locationId);
     }
 
 
-    @RequestMapping(value = "drivers/{id}/locations/{locationId}/delete", method = RequestMethod.POST)
+    @RequestMapping(value = "/drivers/{id}/locations/{locationId}/delete", method = RequestMethod.POST)
     public ResponseEntity<Location> deleteByPost(@PathVariable("id") String id,
                                                  @PathVariable("locationId") String locationId) {
         return this.deleteIml(id, locationId);

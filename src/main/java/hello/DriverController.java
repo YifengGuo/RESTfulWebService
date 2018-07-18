@@ -4,7 +4,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicLong;
 
@@ -19,21 +21,32 @@ public class DriverController {
 
     /**
      * add a new Driver into drivers by post method
-     * @param driver
+     * @param
      * @return
      */
-    @RequestMapping(value = "drivers", method = RequestMethod.POST)
-    public ResponseEntity<Driver> create(@RequestBody(required = false) Driver driver) {
+    @RequestMapping(value = "/drivers", method = RequestMethod.POST)
+    public ResponseEntity<Driver> create(@RequestParam("firstName") String firstName,
+                                         @RequestParam("lastName") String lastName) {
+        Driver driver = new Driver(firstName, lastName);
         long id = counter.incrementAndGet();
         driver.setId(id);
         drivers.put(String.valueOf(id), driver);
-        return new ResponseEntity<Driver>(driver, HttpStatus.CREATED);
+        return new ResponseEntity<>(driver, HttpStatus.CREATED);
+    }
+
+    /**
+     * return all the recorded drivers
+     * @return list of Driver
+     */
+    @RequestMapping(value = "/drivers", method = RequestMethod.GET)
+    public ResponseEntity<List<Driver>> getAll() {
+        return new ResponseEntity<>(new ArrayList<>(drivers.values()), HttpStatus.OK);
     }
 
     /**
      * get a certain driver by its id
      */
-    @RequestMapping(value = "drivers", method = RequestMethod.GET)
+    @RequestMapping(value = "/drivers/{id}", method = RequestMethod.GET)
     public ResponseEntity<Driver> get(@PathVariable("id") String id) {
         Driver driver = null;
         if (!drivers.containsKey(id)) { // cannot find such Driver in the drivers
