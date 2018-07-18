@@ -108,7 +108,15 @@ public class GeoHashUtils {
         for (int i = 0; i < geohash.length(); i++) {
             // integer value of current character's mapping in DECODE_MAP
             final int cd = DECODE_MAP.get(Character.valueOf(geohash.charAt(i))).intValue();
-
+            // t -> 25 ->      1   1  0  0  1
+            //                 0   1  2  3  4
+            //                 16  8  4  2  1
+            //
+            //                 1:  [0 - 180]  longitude
+            //                 1:  [0 - 90]   latitude
+            //                 0:  [0 - 90]   longitude
+            //                 0:  [0 - 45]   latitude
+            //                 1:  [45 - 90]  longitude
             for (int mask : BITS) {
                 if (isEven) { // decode for longitude
                     if ((cd & mask) != 0) { // meas current bit is 1 and real longitude belongs to right interval
@@ -129,6 +137,7 @@ public class GeoHashUtils {
             }
         }
 
+        // at last, calculate the mean value of interval as result
         latitude = (latInterval[0] + latInterval[1]) / 2D;
         longitude = (lngInterval[0] + lngInterval[1]) / 2D;
 
